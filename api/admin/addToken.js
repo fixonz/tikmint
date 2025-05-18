@@ -8,19 +8,32 @@ const DATA_FILE_PATH = path.join(process.cwd(), 'data', 'tokens.json');
 async function ensureDataDir() {
   try {
     await fs.mkdir(path.join(process.cwd(), 'data'), { recursive: true });
+    return true;
   } catch (error) {
     console.error('Error creating data directory:', error);
+    return false;
   }
 }
 
 // Read tokens from file
 async function readTokens() {
   try {
-    await ensureDataDir();
-    const data = await fs.readFile(DATA_FILE_PATH, 'utf8');
-    return JSON.parse(data);
+    const dirCreated = await ensureDataDir();
+    if (!dirCreated) return [];
+    
+    try {
+      const data = await fs.readFile(DATA_FILE_PATH, 'utf8');
+      return JSON.parse(data);
+    } catch (fileError) {
+      // If file doesn't exist, create an empty one
+      if (fileError.code === 'ENOENT') {
+        await fs.writeFile(DATA_FILE_PATH, '[]', 'utf8');
+        return [];
+      }
+      throw fileError;
+    }
   } catch (error) {
-    // If file doesn't exist or is invalid JSON, return empty array
+    console.error("Error reading tokens:", error);
     return [];
   }
 }
@@ -28,11 +41,14 @@ async function readTokens() {
 // Write tokens to file
 async function writeTokens(tokens) {
   try {
-    await ensureDataDir();
+    const dirCreated = await ensureDataDir();
+    if (!dirCreated) throw new Error('Could not create data directory');
+    
     await fs.writeFile(DATA_FILE_PATH, JSON.stringify(tokens, null, 2), 'utf8');
+    return true;
   } catch (error) {
     console.error('Error writing tokens file:', error);
-    throw new Error('Failed to save token data');
+    return false;
   }
 }
 
@@ -59,7 +75,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, ticker, ca, image, time } = req.body;
+    const { name, ticker, ca, time } = req.body;
     
     // Validate required fields
     if (!name || !ticker || !ca) {
@@ -67,12 +83,11 @@ export default async function handler(req, res) {
       return;
     }
 
-    // Create token object with link
+    // Create token object with link - no image required
     const newToken = {
       name,
       ticker,
       ca,
-      image: image || `https://via.placeholder.com/64/00f0f0/ffffff?text=${name.charAt(0)}`,
       time: time || new Date().toLocaleString(),
       link: `https://solscan.io/token/${ca}`
     };
@@ -91,11 +106,14 @@ export default async function handler(req, res) {
     tokens.unshift(newToken);
     
     // Save updated tokens
-    await writeTokens(tokens);
+    const saved = await writeTokens(tokens);
+    if (!saved) {
+      throw new Error('Failed to save token data');
+    }
 
     res.status(200).json({ success: true, token: newToken });
   } catch (error) {
     console.error('Error adding token:', error);
-    res.status(500).json({ error: 'Failed to add token' });
+    res.status(500).json({ error: 'Failed to add token: ' + error.message });
   }
 } 

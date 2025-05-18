@@ -7,7 +7,6 @@ function AdminLaunch() {
     name: '',
     ticker: '',
     ca: '',
-    image: '',
     time: new Date().toLocaleString()
   });
   const [error, setError] = useState(null);
@@ -84,7 +83,6 @@ function AdminLaunch() {
         name: '',
         ticker: '',
         ca: '',
-        image: '',
         time: new Date().toLocaleString()
       });
       
@@ -142,6 +140,7 @@ function AdminLaunch() {
           <span className="nav-title">TikMint Admin</span>
         </div>
         <div className="nav-links">
+          <Link to="/launchtoken">Launch Token</Link>
           <Link to="/">Back to Main Site</Link>
         </div>
       </nav>
@@ -196,18 +195,6 @@ function AdminLaunch() {
               </div>
               
               <div className="form-group">
-                <label htmlFor="image">Image URL</label>
-                <input
-                  type="text"
-                  id="image"
-                  name="image"
-                  value={formData.image}
-                  onChange={handleChange}
-                  placeholder="https://example.com/image.png"
-                />
-              </div>
-              
-              <div className="form-group">
                 <label htmlFor="time">Launch Time</label>
                 <input
                   type="text"
@@ -234,11 +221,6 @@ function AdminLaunch() {
                   {tokens.map((token, idx) => (
                     <div className="admin-token-item" key={idx}>
                       <div className="admin-token-details">
-                        <img 
-                          src={token.image || `https://via.placeholder.com/64/00f0f0/ffffff?text=${token.name.charAt(0)}`} 
-                          alt={token.name}
-                          className="admin-token-image"
-                        />
                         <div className="admin-token-info">
                           <div className="admin-token-name">{token.name} <span className="admin-token-ticker">{token.ticker}</span></div>
                           <div className="admin-token-ca">{token.ca}</div>

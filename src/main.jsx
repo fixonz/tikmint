@@ -4,8 +4,18 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 import AdminLaunch from './AdminLaunch.jsx'
+import LaunchPumpToken from './LaunchPumpToken.jsx'
 import '@fontsource/orbitron/700.css';
 import '@fontsource/rajdhani/500.css';
+
+// Node.js polyfills for Solana web3.js
+import { Buffer } from 'buffer';
+import process from 'process';
+
+// Add polyfills to window
+window.Buffer = Buffer;
+window.process = process;
+window.global = window;
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -13,6 +23,7 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/adminlaunch" element={<AdminLaunch />} />
+        <Route path="/launchtoken" element={<LaunchPumpToken />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

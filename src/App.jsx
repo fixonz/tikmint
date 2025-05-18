@@ -132,7 +132,9 @@ function App() {
                 // Display actual launches if available
                 launches.slice(0, 10).map((launch, idx) => (
                   <div className="launch-item fadein-up" key={idx}>
-                    <img src={launch.image || "https://via.placeholder.com/38"} alt={launch.name} className="launch-token-img" />
+                    <div className="launch-icon">
+                      {launch.name.charAt(0).toUpperCase()}
+                    </div>
                     <div className="launch-info">
                       <div className="launch-name">{launch.name || "Unknown Token"} {launch.ticker && <span className="token-ticker">{launch.ticker}</span>}</div>
                       <div className="launch-time">{launch.time || "Recent"}</div>

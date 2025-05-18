@@ -11,8 +11,7 @@ const sampleLaunches = [
     ticker: '$TOAST', 
     ca: 'ALcYrZ4A41JUoDGKCbhUkjkcUiRjs2sbrUhmTJXMpump', 
     time: new Date().toLocaleString(), 
-    link: 'https://solscan.io/token/ALcYrZ4A41JUoDGKCbhUkjkcUiRjs2sbrUhmTJXMpump', 
-    image: 'https://pump.mypinata.cloud/ipfs/QmPD26y6wXQwA4itfz9FTVsxGGxbaGPVPjDnvCXsR7ZHsu?img-width=256&img-dpr=2&img-onerror=redirect' 
+    link: 'https://solscan.io/token/ALcYrZ4A41JUoDGKCbhUkjkcUiRjs2sbrUhmTJXMpump'
   }
 ];
 
