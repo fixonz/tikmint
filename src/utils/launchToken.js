@@ -64,28 +64,7 @@ export async function launchPumpFunToken(privateKey, tokenName, tokenSymbol, des
         formData.append('symbol', tokenSymbol);
         formData.append('description', description);
         formData.append('showName', 'true');
-        
-        if (tokenImage) {
-          // Convert base64 to blob
-          const base64Data = tokenImage.split(',')[1];
-          const byteCharacters = atob(base64Data);
-          const byteArrays = [];
-          
-          for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-            const slice = byteCharacters.slice(offset, offset + 512);
-            const byteNumbers = new Array(slice.length);
-            
-            for (let i = 0; i < slice.length; i++) {
-              byteNumbers[i] = slice.charCodeAt(i);
-            }
-            
-            const byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-          }
-          
-          const blob = new Blob(byteArrays, { type: 'image/png' });
-          formData.append('file', blob, 'image.png');
-        }
+        formData.append('file', tokenImage); // Send the base64 image directly
 
         const ipfsResponse = await fetch('/api/pumpfun/ipfs', {
           method: 'POST',

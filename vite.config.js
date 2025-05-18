@@ -33,7 +33,12 @@ export default defineConfig({
           ? 'https://tikmint.xyz'  // Your production domain
           : 'http://localhost:3000',
         changeOrigin: true,
-        secure: false
+        secure: false,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+        }
       }
     }
   }
