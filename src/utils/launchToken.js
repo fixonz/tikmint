@@ -57,27 +57,48 @@ export async function launchPumpFunToken(privateKey, tokenName, tokenSymbol, des
         const mintKeypair = Keypair.generate();
         console.log("Generated token address:", mintKeypair.publicKey.toString());
         
-        // Upload image and metadata to IPFS via Pump.fun
-        console.log("Uploading metadata and image to IPFS...");
-        const metadataResponse = await fetch("/api/pumpfun/ipfs", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name: tokenName,
-                symbol: tokenSymbol,
-                description: description,
-                showName: 'true',
-                file: tokenImage
-            })
-        });
+        // Upload metadata and image to IPFS
+        console.log('Uploading metadata and image to IPFS...');
+        const formData = new FormData();
+        formData.append('name', tokenName);
+        formData.append('symbol', tokenSymbol);
+        formData.append('description', description);
+        formData.append('showName', 'true');
         
-        if (!metadataResponse.ok) {
-            throw new Error(`Failed to upload metadata: ${metadataResponse.statusText}`);
+        if (tokenImage) {
+          // Convert base64 to blob
+          const base64Data = tokenImage.split(',')[1];
+          const byteCharacters = atob(base64Data);
+          const byteArrays = [];
+          
+          for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+            const slice = byteCharacters.slice(offset, offset + 512);
+            const byteNumbers = new Array(slice.length);
+            
+            for (let i = 0; i < slice.length; i++) {
+              byteNumbers[i] = slice.charCodeAt(i);
+            }
+            
+            const byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+          }
+          
+          const blob = new Blob(byteArrays, { type: 'image/png' });
+          formData.append('file', blob, 'image.png');
+        }
+
+        const ipfsResponse = await fetch('/api/pumpfun/ipfs', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!ipfsResponse.ok) {
+          const errorText = await ipfsResponse.text();
+          console.error('IPFS upload failed:', errorText);
+          throw new Error(`Failed to upload metadata: ${ipfsResponse.status} ${ipfsResponse.statusText} - ${errorText}`);
         }
         
-        const metadataResult = await metadataResponse.json();
+        const metadataResult = await ipfsResponse.json();
         console.log("Metadata uploaded successfully:", metadataResult);
         
         // Prepare token metadata for creation
