@@ -1,7 +1,7 @@
 import './App.css'
 import Particles from 'react-tsparticles';
 import { loadFull } from 'tsparticles';
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
 const PLACEHOLDER_LAUNCHES = Array(10).fill(null);
 
@@ -14,8 +14,34 @@ const scrollToSection = (id) => {
 };
 
 function App() {
-  // This will be replaced with real launches from backend
-  const launches = [];
+  // State for launches
+  const [launches, setLaunches] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch launches from backend
+  useEffect(() => {
+    const fetchLaunches = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:3001/api/launches');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        setLaunches(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching launches:", error);
+        setError("Failed to fetch launches. Please try again later.");
+        setLoading(false);
+      }
+    };
+
+    fetchLaunches();
+  }, []);
 
   const particlesInit = useCallback(async (engine) => {
     await loadFull(engine);
@@ -78,21 +104,7 @@ function App() {
                 Mention <b>@tikmintdev</b> with your <b>$CASHTAG</b> and token name.<br />
                 Our system will detect your post and automatically launch your token for <span className="free-highlight-inline">FREE!</span>
               </div>
-              <a href="https://www.tiktok.com/@tikmintdev" target="_blank" rel="noopener noreferrer" className="cta-button" style={{ 
-                display: 'inline-block',
-                marginTop: '20px',
-                padding: '14px 28px',
-                background: 'linear-gradient(45deg, #000000, #333333)',
-                color: 'white',
-                borderRadius: '30px',
-                fontFamily: 'Orbitron, sans-serif',
-                fontWeight: 'bold',
-                fontSize: '16px',
-                textDecoration: 'none',
-                border: '2px solid #00fff7',
-                boxShadow: '0 4px 20px rgba(0, 255, 247, 0.6)',
-                transition: 'all 0.3s ease'
-              }}>
+              <a href="https://www.tiktok.com/@tikmintdev" target="_blank" rel="noopener noreferrer" className="cta-button">
                 LAUNCH ON TIKTOK
               </a>
             </main>
@@ -103,24 +115,39 @@ function App() {
           <div className="launches-section glass-card fadein-up">
             <div className="launches-header">
               <h2 className="neon-text">Latest Launches</h2>
+              <p className="wallet-tracking">Tracking: MiNT5ERW9ResSsKRmeg4b29XPj5LDvW7MoBCrNmdiPL</p>
             </div>
+            
+            {error && <div className="error-message">{error}</div>}
+            
             <div className="launches-list presized-launches">
-              {(launches.length ? launches : PLACEHOLDER_LAUNCHES).slice(0, 10).map((launch, idx) => (
-                <div className={`launch-item ${launch ? 'fadein-up' : 'shimmer'}`} key={idx}>
-                  {launch ? (
-                    <>
-                      <img src={launch.image} alt={launch.name} className="launch-token-img" />
-                      <div className="launch-info">
-                        <div className="launch-name">{launch.name}</div>
-                        <div className="launch-time">{launch.time}</div>
-                        <a href={launch.link} className="launch-link" target="_blank" rel="noopener noreferrer">View</a>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="launch-placeholder">Waiting for new launch...</div>
-                  )}
+              {loading ? (
+                // Display placeholders while loading
+                PLACEHOLDER_LAUNCHES.slice(0, 10).map((_, idx) => (
+                  <div className="launch-item shimmer" key={idx}>
+                    <div className="launch-placeholder">Loading launches...</div>
+                  </div>
+                ))
+              ) : launches.length > 0 ? (
+                // Display actual launches if available
+                launches.slice(0, 10).map((launch, idx) => (
+                  <div className="launch-item fadein-up" key={idx}>
+                    <img src={launch.image || "https://via.placeholder.com/38"} alt={launch.name} className="launch-token-img" />
+                    <div className="launch-info">
+                      <div className="launch-name">{launch.name || "Unknown Token"} {launch.ticker && <span className="token-ticker">{launch.ticker}</span>}</div>
+                      <div className="launch-time">{launch.time || "Recent"}</div>
+                      <a href={launch.link || `https://solscan.io/token/${launch.ca}`} className="launch-link" target="_blank" rel="noopener noreferrer">
+                        View on SolScan
+                      </a>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                // Display message when no launches available
+                <div className="launch-item">
+                  <div className="launch-placeholder">No active launches found. Check back soon!</div>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </section>
