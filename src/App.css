@@ -5,6 +5,7 @@ body, html {
   padding: 0;
   font-family: 'Rajdhani', 'Segoe UI', 'Arial', sans-serif;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 /* Animated gradient overlay */
@@ -26,38 +27,128 @@ body, html {
 .tikmint-outer {
   min-height: 100vh;
   width: 100%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
   position: relative;
 }
 
-.tikmint-center-viewport {
-  min-height: 100vh;
-  max-width: 700px;
-  margin: 0 auto;
+/* Navbar */
+.tikmint-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  background: rgba(0, 255, 247, 0.85);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: background 0.3s ease;
+}
+.tikmint-navbar:hover {
+  background: rgba(0, 255, 247, 0.95);
+}
+.nav-logo-title {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.nav-logo {
+  width: 36px;
+  height: 36px;
+  margin-right: 0.7rem;
+  filter: drop-shadow(0 0 8px #00000088);
+}
+.nav-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: 1px;
+}
+.nav-links a {
+  margin: 0 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+  text-decoration: none;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+  cursor: pointer;
+}
+.nav-links a:hover {
+  color: #ff00e0;
+  text-shadow: 0 0 8px #ff00e088;
+}
+.nav-social-links {
+  display: flex;
+  gap: 0.8rem;
+}
+.nav-social-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #111;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  width: 32px;
+  height: 32px;
+  transition: background 0.2s, transform 0.2s;
+}
+.nav-social-links a:hover {
+  background: #ff00e0;
+  transform: scale(1.1);
+}
+.nav-social-links svg {
+  width: 18px; height: 18px;
+}
+
+/* Page Content Wrapper */
+.tikmint-page-content {
+  padding-top: 80px; /* Height of navbar */
+  max-width: 1280px;
+  margin-left: 100px;
+  margin-right: auto;
+  box-sizing: border-box;
+  position: relative; /* Needed for transform to work as expected relative to its centered position */
+  transform: translateX(120px); /* Shift the centered block 120px to the right */
+}
+
+/* Media query to revert to simple centering on smaller screens */
+@media (max-width: 1440px) { /* Increased breakpoint slightly to ensure transform is removed earlier */
+  .tikmint-page-content {
+    transform: translateX(0); /* Remove the shift */
+    max-width: 95%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Sections */
+.tikmint-section {
+  min-height: calc(100vh - 80px); /* Adjust for navbar */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 1;
-  position: relative;
-  padding: 0;
-  margin-top: 0;
-  animation: slidein-left 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+  padding: 3rem 2rem; /* Padding within each section */
+  width: 100%; /* Sections take full width of .tikmint-page-content */
+  box-sizing: border-box;
 }
-@keyframes slidein-left {
-  from { opacity: 0; transform: translateX(-80px); }
-  to { opacity: 1; transform: translateX(0); }
+.hero-section {
+  /* Specific styles for hero if needed, e.g., different bg */
+  text-align: center; /* Ensure text within hero is centered by default */
 }
 
+/* Hero content alignment */
 .tikmint-header {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 0.7rem;
+  margin-left: auto;
+  margin-right: auto;
 }
-
 .tikmint-logo-centered {
   width: 64px;
   height: 64px;
@@ -80,7 +171,6 @@ body, html {
   50% { opacity: 0.85; }
   100% { opacity: 1; }
 }
-
 .tikmint-logo-main {
   width: 180px;
   max-width: 60vw;
@@ -96,7 +186,6 @@ body, html {
   50% { filter: drop-shadow(0 0 24px #6f6fffcc) drop-shadow(0 0 32px #ff00e0cc); }
   100% { filter: drop-shadow(0 0 8px #00fff7cc) drop-shadow(0 0 18px #ff00e088); }
 }
-
 .tikmint-message {
   margin-bottom: 1.5rem;
   line-height: 1.6;
@@ -107,7 +196,6 @@ body, html {
   letter-spacing: 0.04em;
   animation: fadein 1.2s;
 }
-
 .neon-text {
   font-family: 'Orbitron', 'Rajdhani', sans-serif;
   color: #00bfae;
@@ -117,7 +205,6 @@ body, html {
   text-transform: uppercase;
   font-weight: 700;
 }
-
 .glass-card {
   background: rgba(255,255,255,0.97);
   border-radius: 22px;
@@ -129,6 +216,9 @@ body, html {
   animation: card-in 1.2s cubic-bezier(.68,-0.55,.27,1.55);
   margin-left: auto;
   margin-right: auto;
+  max-width: 700px;
+  width: 100%;
+  padding: 2rem 2.5rem 2.5rem 2.5rem;
 }
 .glass-card::before {
   content: '';
@@ -146,14 +236,12 @@ body, html {
   from { opacity: 0; transform: translateY(40px) scale(0.95); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
-
 .launches-section {
   width: 100%;
   max-width: 440px;
   padding: 1.2rem 1rem 1.5rem 1rem;
   margin: 0 auto 1.5rem auto;
 }
-
 .launches-header {
   display: flex;
   align-items: center;
@@ -161,7 +249,6 @@ body, html {
   margin-bottom: 0.7rem;
   justify-content: center;
 }
-
 .presized-launches {
   min-height: 520px;
   display: flex;
@@ -169,7 +256,6 @@ body, html {
   justify-content: flex-start;
   gap: 0.7rem;
 }
-
 .launch-item {
   display: flex;
   align-items: center;
@@ -203,7 +289,6 @@ body, html {
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 .launch-token-img {
   width: 38px;
   height: 38px;
@@ -213,7 +298,6 @@ body, html {
   border: 2px solid #00fff7;
   box-shadow: 0 0 8px #00fff7cc;
 }
-
 .launch-info {
   flex: 1;
   display: flex;
@@ -222,7 +306,6 @@ body, html {
   gap: 0.2rem;
   font-family: 'Rajdhani', 'Segoe UI', 'Arial', sans-serif;
 }
-
 .launch-name {
   font-weight: 800;
   color: #1a1a1a;
@@ -232,13 +315,11 @@ body, html {
   font-size: 1.08em;
   text-transform: uppercase;
 }
-
 .launch-time {
   font-size: 0.95em;
   color: #444;
   letter-spacing: 0.03em;
 }
-
 .launch-link {
   color: #00bfae;
   text-decoration: underline;
@@ -249,7 +330,6 @@ body, html {
   letter-spacing: 0.04em;
   font-weight: 700;
 }
-
 .launch-placeholder {
   color: #888;
   background: linear-gradient(90deg, #eafff6 25%, #fff 50%, #eafff6 75%);
@@ -269,24 +349,19 @@ body, html {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
-
 .fadein-up {
   animation: fadein-up 0.7s;
 }
-
 .neon-glow {
   filter: drop-shadow(0 0 18px #00fff7cc) drop-shadow(0 0 32px #00fff7cc);
 }
-
 .neon-fadein {
   animation: fadein 1.2s;
 }
-
 @keyframes fadein {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-
 .tikmint-badge {
   margin-bottom: 1.2rem;
   background: linear-gradient(90deg, #00fff7 0%, #6f6fff 100%);
@@ -306,7 +381,6 @@ body, html {
   from { opacity: 0; transform: scale(0.8) translateY(-30px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
-
 .free-highlight {
   color: #ff00e0;
   text-shadow: 0 0 8px #ff00e0cc, 0 0 2px #fff;
@@ -315,7 +389,6 @@ body, html {
   margin-left: 0.3em;
   letter-spacing: 0.12em;
 }
-
 .free-highlight-inline {
   color: #ff00e0;
   text-shadow: 0 0 8px #ff00e0cc, 0 0 2px #fff;
@@ -326,7 +399,31 @@ body, html {
   display: inline-block;
   animation: badge-pop 1.2s cubic-bezier(.68,-0.55,.27,1.55);
 }
-
+.social-links {
+  display: flex;
+  gap: 1.1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+.social-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px #00fff7cc;
+  width: 38px;
+  height: 38px;
+  transition: box-shadow 0.18s, transform 0.18s;
+}
+.social-links a:hover {
+  box-shadow: 0 4px 16px #ff00e0cc, 0 2px 8px #00fff7cc;
+  transform: scale(1.12) rotate(-8deg);
+}
+.social-links svg {
+  width: 28px;
+  height: 28px;
+}
 @media (max-width: 600px) {
   .tikmint-logo-centered {
     width: 48px;
@@ -346,31 +443,61 @@ body, html {
   .launches-section {
     padding: 0.7rem 0.3rem 1rem 0.3rem;
   }
+  .nav-logo {
+    width: 30px; height: 30px;
+  }
+  .nav-title { display: none; }
+  .nav-social-links svg { width: 16px; height: 16px; }
+  .nav-social-links a { width: 28px; height: 28px; }
 }
-
 @media (max-width: 900px) {
-  .tikmint-center-viewport {
-    align-items: center;
-    margin-left: 0;
+  .tikmint-navbar {
+    padding: 0.8rem 1rem;
+  }
+  .nav-links {
+    display: none;
+  }
+  .nav-title {
+    font-size: 1.3rem;
+  }
+  .tikmint-section {
+    padding: 2rem 1rem;
+    min-height: auto;
+  }
+  .launches-section.glass-card, .about-section {
+    width: 95%;
+  }
+  .glass-card {
     max-width: 98vw;
+    padding: 1.2rem 0.7rem 1.5rem 0.7rem;
+  }
+  .about-section {
+    padding: 1.2rem 0.7rem 1.5rem 0.7rem;
+    font-size: 0.98rem;
+    max-width: 98vw;
+  }
+  .tikmint-badge {
+    font-size: 1rem;
+    padding: 0.5em 1em;
   }
   .glass-card::before {
     width: 6px;
   }
 }
-
 .about-section {
   margin-top: 2.5rem;
   padding: 2.2rem 2rem 2.5rem 2rem;
   background: rgba(255,255,255,0.92);
   border-radius: 18px;
   box-shadow: 0 2px 16px #00fff7cc, 0 1.5px 8px #6f6fff33;
-  max-width: 700px;
+  max-width: 800px;
   width: 100%;
+  margin: 2rem auto;
   color: #1a1a1a;
   font-size: 1.08rem;
   line-height: 1.7;
   margin-bottom: 2.5rem;
+  text-align: center; /* Center the text within the about section block */
   margin-left: auto;
   margin-right: auto;
 }
@@ -387,27 +514,6 @@ body, html {
 .about-section p {
   margin: 0 0 1.2em 0;
 }
-
-@media (max-width: 900px) {
-  .tikmint-center-viewport {
-    align-items: center;
-    margin-left: 0;
-    max-width: 98vw;
-  }
-  .glass-card {
-    max-width: 98vw;
-  }
-  .about-section {
-    padding: 1.2rem 0.7rem 1.5rem 0.7rem;
-    font-size: 0.98rem;
-    max-width: 98vw;
-  }
-  .tikmint-badge {
-    font-size: 1rem;
-    padding: 0.5em 1em;
-  }
-}
-
 @media (max-width: 600px) {
   .about-section {
     padding: 0.7rem 0.2rem 1rem 0.2rem;
@@ -430,4 +536,40 @@ body, html {
     padding: 0.4em 0.7em;
     border-radius: 10px;
   }
+}
+
+/* Make sure section wrappers are also allowing centering */
+.launches-section-wrapper,
+.about-section-wrapper {
+  display: flex; /* Added to help center their direct children if needed */
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Ensure cards/content blocks within wrappers are centered */
+.launches-section.glass-card {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Ensure specific content blocks within sections also respect centering and max-widths */
+.hero-main-content {
+  max-width: 700px;
+  width: 100%; /* Take full width up to max-width */
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.launches-section.glass-card {
+  max-width: 700px; 
+  width: 100%; /* Take full width up to max-width */
+  margin: 2rem auto; 
+}
+
+.about-section { /* This is the footer element */
+  max-width: 800px; 
+  width: 100%; /* Take full width up to max-width */
+  margin: 2rem auto; 
+  text-align: center; 
 }
