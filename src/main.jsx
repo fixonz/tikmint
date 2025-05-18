@@ -8,15 +8,6 @@ import LaunchPumpToken from './LaunchPumpToken.jsx'
 import '@fontsource/orbitron/700.css';
 import '@fontsource/rajdhani/500.css';
 
-// Node.js polyfills for Solana web3.js
-import { Buffer } from 'buffer';
-import process from 'process';
-
-// Add polyfills to window
-window.Buffer = Buffer;
-window.process = process;
-window.global = window;
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>

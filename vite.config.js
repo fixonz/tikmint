@@ -1,25 +1,29 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      process: 'process/browser',
-      stream: 'stream-browserify',
-      zlib: 'browserify-zlib',
-      util: 'util'
-    }
+  plugins: [
+    react(),
+    nodePolyfills({
+      // Whether to polyfill `node:` protocol imports.
+      protocolImports: true,
+      // Polyfills to include
+      include: ['buffer', 'process', 'util', 'stream', 'zlib']
+    })
+  ],
+  // Additional configuration to ensure compatibility
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        global: 'globalThis',
+      },
+    },
   },
+  // Define global variables
   define: {
-    'process.env': {},
-    'global': {}
-  },
-  build: {
-    commonjsOptions: {
-      transformMixedEsModules: true
-    }
+    global: 'globalThis',
+    'process.env': {}
   }
 })

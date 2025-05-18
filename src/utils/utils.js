@@ -3,10 +3,38 @@ import bs58 from 'bs58';
 import { sha256 } from '@noble/hashes/sha256';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
-export async function getKeyPairFromPrivateKey(key) {
-    return Keypair.fromSecretKey(
-        new Uint8Array(bs58.decode(key))
-    );
+export async function getKeyPairFromPrivateKey(privateKeyString) {
+    try {
+        // Remove any whitespace
+        privateKeyString = privateKeyString.trim();
+        
+        let secretKey;
+        
+        // Check if it's a base58 encoded private key
+        if (/^[1-9A-HJ-NP-Za-km-z]{88,}$/.test(privateKeyString)) {
+            secretKey = bs58.decode(privateKeyString);
+        } 
+        // Check if it's an array of numbers
+        else if (privateKeyString.startsWith('[') && privateKeyString.endsWith(']')) {
+            secretKey = new Uint8Array(JSON.parse(privateKeyString));
+        }
+        // Otherwise assume it's a hex string
+        else {
+            // Remove '0x' prefix if present
+            if (privateKeyString.startsWith('0x')) {
+                privateKeyString = privateKeyString.slice(2);
+            }
+            
+            // Convert hex to Uint8Array
+            secretKey = new Uint8Array(
+                privateKeyString.match(/.{1,2}/g).map(byte => parseInt(byte, 16))
+            );
+        }
+        
+        return Keypair.fromSecretKey(secretKey);
+    } catch (error) {
+        throw new Error(`Invalid private key format: ${error.message}`);
+    }
 }
 
 export async function createTransaction(connection, instructions, payer) {

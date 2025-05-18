@@ -225,7 +225,13 @@ function AdminLaunch() {
                           <div className="admin-token-name">{token.name} <span className="admin-token-ticker">{token.ticker}</span></div>
                           <div className="admin-token-ca">{token.ca}</div>
                           <div className="admin-token-time">{token.time}</div>
+                          {token.description && <div className="admin-token-description">{token.description}</div>}
                         </div>
+                        {token.image && (
+                          <div className="admin-token-image">
+                            <img src={token.image} alt={token.name} />
+                          </div>
+                        )}
                       </div>
                       <button
                         className="admin-delete-btn"

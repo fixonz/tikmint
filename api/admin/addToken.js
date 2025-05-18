@@ -75,7 +75,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, ticker, ca, time } = req.body;
+    const { name, ticker, ca, time, image, description } = req.body;
     
     // Validate required fields
     if (!name || !ticker || !ca) {
@@ -83,14 +83,20 @@ export default async function handler(req, res) {
       return;
     }
 
-    // Create token object with link - no image required
+    // Create token object with link
     const newToken = {
       name,
-      ticker,
+      ticker: ticker.startsWith('$') ? ticker : `$${ticker}`,
       ca,
       time: time || new Date().toLocaleString(),
-      link: `https://solscan.io/token/${ca}`
+      link: `https://solscan.io/token/${ca}`,
+      description: description || "Launched on TikMint"
     };
+
+    // Add image if provided
+    if (image) {
+      newToken.image = image;
+    }
 
     // Read existing tokens
     const tokens = await readTokens();
@@ -98,12 +104,13 @@ export default async function handler(req, res) {
     // Check if token already exists
     const tokenExists = tokens.some(token => token.ca === ca);
     if (tokenExists) {
-      res.status(409).json({ error: 'Token with this contract address already exists' });
-      return;
+      // If token exists, update it
+      const tokenIndex = tokens.findIndex(token => token.ca === ca);
+      tokens[tokenIndex] = { ...tokens[tokenIndex], ...newToken };
+    } else {
+      // Add new token at the beginning (most recent)
+      tokens.unshift(newToken);
     }
-    
-    // Add new token at the beginning (most recent)
-    tokens.unshift(newToken);
     
     // Save updated tokens
     const saved = await writeTokens(tokens);

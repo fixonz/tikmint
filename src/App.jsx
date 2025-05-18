@@ -132,12 +132,25 @@ function App() {
                 // Display actual launches if available
                 launches.slice(0, 10).map((launch, idx) => (
                   <div className="launch-item fadein-up" key={idx}>
-                    <div className="launch-icon">
-                      {launch.name.charAt(0).toUpperCase()}
-                    </div>
+                    {launch.image ? (
+                      <img 
+                        src={launch.image} 
+                        className="launch-token-img" 
+                        alt={launch.name || "Token"} 
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : (
+                      <div className="launch-icon">
+                        {launch.name.charAt(0).toUpperCase()}
+                      </div>
+                    )}
                     <div className="launch-info">
                       <div className="launch-name">{launch.name || "Unknown Token"} {launch.ticker && <span className="token-ticker">{launch.ticker}</span>}</div>
                       <div className="launch-time">{launch.time || "Recent"}</div>
+                      {launch.description && <div className="launch-description">{launch.description}</div>}
                       <a href={launch.link || `https://solscan.io/token/${launch.ca}`} className="launch-link" target="_blank" rel="noopener noreferrer">
                         View on SolScan
                       </a>

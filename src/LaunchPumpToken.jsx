@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { launchPumpFunToken } from './utils/launchToken';
 import './App.css';
@@ -8,18 +8,77 @@ function LaunchPumpToken() {
     privateKey: '',
     name: '',
     ticker: '',
+    description: 'Launched on TikMint', // Fixed description
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [tokenAddress, setTokenAddress] = useState(null);
+  const [tokenImage, setTokenImage] = useState(null);
+  const imageContainerRef = useRef(null);
+  
+  // Listen for paste events (CTRL+V)
+  useEffect(() => {
+    const handlePaste = (e) => {
+      if (e.clipboardData && e.clipboardData.items) {
+        // Look for image content in the clipboard
+        const items = e.clipboardData.items;
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].type.indexOf('image') !== -1) {
+            const blob = items[i].getAsFile();
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+              setTokenImage(e.target.result);
+            };
+            
+            reader.readAsDataURL(blob);
+            e.preventDefault();
+            break;
+          }
+        }
+      }
+    };
+
+    // Add paste event listener to the document
+    document.addEventListener('paste', handlePaste);
+    
+    return () => {
+      document.removeEventListener('paste', handlePaste);
+    };
+  }, []);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
+    // Don't update description field as it's fixed
+    if (name === 'description') return;
+    
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
+  };
+  
+  const handleImageClick = () => {
+    // Create a file input and trigger it
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.onchange = (e) => {
+      if (e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setTokenImage(e.target.result);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    };
+    fileInput.click();
+  };
+  
+  const handleImageClear = (e) => {
+    e.stopPropagation();
+    setTokenImage(null);
   };
   
   const handleSubmit = async (e) => {
@@ -28,6 +87,11 @@ function LaunchPumpToken() {
     // Validate form data
     if (!formData.privateKey || !formData.name || !formData.ticker) {
       setError('Please fill in all required fields');
+      return;
+    }
+    
+    if (!tokenImage) {
+      setError('Please add a token image');
       return;
     }
     
@@ -41,7 +105,9 @@ function LaunchPumpToken() {
       const result = await launchPumpFunToken(
         formData.privateKey,
         formData.name,
-        formData.ticker
+        formData.ticker,
+        formData.description,
+        tokenImage
       );
       
       if (!result.success) {
@@ -49,7 +115,7 @@ function LaunchPumpToken() {
       }
       
       setTokenAddress(result.tokenAddress);
-      setSuccess(`Token "${formData.name}" launched successfully!`);
+      setSuccess(`Token "${formData.name}" launched successfully and 0.001 SOL worth of tokens purchased!`);
       
       // Reset sensitive data
       setFormData(prev => ({
@@ -86,6 +152,12 @@ function LaunchPumpToken() {
             <h2 className="neon-text">Launch PumpFun Token</h2>
             <p className="admin-instruction">Create a new token on PumpFun and add it to the tracked list</p>
             
+            <div className="token-warning">
+              <strong>Important:</strong> Launching requires approximately 0.01 SOL for transaction fees.
+              The system will automatically purchase 0.001 SOL worth of tokens.
+              Make sure your wallet has sufficient funds.
+            </div>
+            
             {error && <div className="error-message">{error}</div>}
             {success && <div className="success-message">{success}</div>}
             
@@ -93,6 +165,7 @@ function LaunchPumpToken() {
               <div className="success-message">
                 <p>Token Address: <a href={`https://solscan.io/token/${tokenAddress}`} target="_blank" rel="noopener noreferrer">{tokenAddress}</a></p>
                 <p>Your token has been added to the website listings automatically!</p>
+                <p>The process automatically purchased exactly 0.001 SOL worth of your token to provide initial liquidity.</p>
               </div>
             )}
             
@@ -136,6 +209,46 @@ function LaunchPumpToken() {
                   required
                 />
                 <small className="input-help">Don't include $ in the ticker</small>
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="description">Description</label>
+                <input
+                  type="text"
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  readOnly
+                  disabled
+                  className="readonly-input"
+                />
+                <small className="input-help">Fixed description for all tokens: "Launched on TikMint"</small>
+              </div>
+              
+              <div className="form-group">
+                <label>Token Image (Required)*</label>
+                <div 
+                  className="token-image-container" 
+                  onClick={handleImageClick}
+                  ref={imageContainerRef}
+                >
+                  {tokenImage ? (
+                    <div className="token-image-preview">
+                      <img src={tokenImage} alt="Token" />
+                      <button 
+                        type="button" 
+                        className="token-image-clear-btn"
+                        onClick={handleImageClear}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="token-image-placeholder">
+                      <span>Click to upload or CTRL+V to paste</span>
+                    </div>
+                  )}
+                </div>
               </div>
               
               <button type="submit" className="admin-submit-btn" disabled={isLoading}>
