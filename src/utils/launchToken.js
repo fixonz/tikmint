@@ -57,28 +57,20 @@ export async function launchPumpFunToken(privateKey, tokenName, tokenSymbol, des
         const mintKeypair = Keypair.generate();
         console.log("Generated token address:", mintKeypair.publicKey.toString());
         
-        // Convert base64 image to blob for upload
-        const base64Data = tokenImage.split(',')[1];
-        const binaryData = atob(base64Data);
-        const array = new Uint8Array(binaryData.length);
-        for (let i = 0; i < binaryData.length; i++) {
-            array[i] = binaryData.charCodeAt(i);
-        }
-        const blob = new Blob([array], { type: 'image/png' });
-        
-        // Create form data for metadata
-        const formData = new FormData();
-        formData.append('name', tokenName);
-        formData.append('symbol', tokenSymbol);
-        formData.append('description', description);
-        formData.append('showName', 'true');
-        formData.append('file', blob, 'token_image.png');
-        
         // Upload image and metadata to IPFS via Pump.fun
         console.log("Uploading metadata and image to IPFS...");
-        const metadataResponse = await fetch("https://pump.fun/api/ipfs", {
+        const metadataResponse = await fetch("/api/pumpfun/ipfs", {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: tokenName,
+                symbol: tokenSymbol,
+                description: description,
+                showName: 'true',
+                file: tokenImage
+            })
         });
         
         if (!metadataResponse.ok) {
