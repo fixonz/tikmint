@@ -1,0 +1,433 @@
+body, html {
+  background: #00fff7ff;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Rajdhani', 'Segoe UI', 'Arial', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Animated gradient overlay */
+.tikmint-outer::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, #00fff7 0%, #6f6fff 50%, #ff00e0 100%);
+  opacity: 0.13;
+  animation: gradient-move 8s ease-in-out infinite alternate;
+}
+@keyframes gradient-move {
+  0% { filter: blur(0px); background-position: 0% 50%; }
+  100% { filter: blur(4px); background-position: 100% 50%; }
+}
+
+.tikmint-outer {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.tikmint-center-viewport {
+  min-height: 100vh;
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  position: relative;
+  padding: 0;
+  margin-top: 0;
+  animation: slidein-left 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+}
+@keyframes slidein-left {
+  from { opacity: 0; transform: translateX(-80px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.tikmint-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0.7rem;
+}
+
+.tikmint-logo-centered {
+  width: 64px;
+  height: 64px;
+  max-width: 20vw;
+  margin-bottom: 0.3rem;
+  filter: drop-shadow(0 0 16px #00fff7cc) drop-shadow(0 0 32px #6f6fff88);
+  animation: pulse-glow 2.5s infinite alternate, shine-logo 3.5s infinite linear;
+  transition: transform 0.2s;
+}
+.tikmint-logo-centered:hover {
+  transform: scale(1.08) rotate(-8deg);
+  filter: drop-shadow(0 0 32px #ff00e0cc) drop-shadow(0 0 48px #00fff7cc);
+}
+@keyframes pulse-glow {
+  0% { filter: drop-shadow(0 0 8px #00fff7cc); }
+  100% { filter: drop-shadow(0 0 32px #00fff7ff); }
+}
+@keyframes shine-logo {
+  0% { opacity: 1; }
+  50% { opacity: 0.85; }
+  100% { opacity: 1; }
+}
+
+.tikmint-logo-main {
+  width: 180px;
+  max-width: 60vw;
+  margin-bottom: 0.7rem;
+  font-family: 'Orbitron', 'Rajdhani', sans-serif;
+  filter: drop-shadow(0 0 8px #00fff7cc) drop-shadow(0 0 18px #ff00e088);
+  animation: shine-title 4s infinite linear;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+@keyframes shine-title {
+  0% { filter: drop-shadow(0 0 8px #00fff7cc) drop-shadow(0 0 18px #ff00e088); }
+  50% { filter: drop-shadow(0 0 24px #6f6fffcc) drop-shadow(0 0 32px #ff00e0cc); }
+  100% { filter: drop-shadow(0 0 8px #00fff7cc) drop-shadow(0 0 18px #ff00e088); }
+}
+
+.tikmint-message {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  color: #222;
+  text-shadow: 0 0 8px #00fff744, 0 0 2px #fff;
+  font-size: 1.18rem;
+  font-family: 'Rajdhani', 'Segoe UI', 'Arial', sans-serif;
+  letter-spacing: 0.04em;
+  animation: fadein 1.2s;
+}
+
+.neon-text {
+  font-family: 'Orbitron', 'Rajdhani', sans-serif;
+  color: #00bfae;
+  text-shadow: 0 0 8px #00fff7, 0 0 18px #00fff7cc, 0 0 2px #fff;
+  letter-spacing: 0.18em;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.glass-card {
+  background: rgba(255,255,255,0.97);
+  border-radius: 22px;
+  box-shadow: 0 4px 32px 0 #00fff7cc, 0 1.5px 8px 0 #ff00e088;
+  backdrop-filter: blur(12px) saturate(1.3);
+  border: 2.5px solid #00fff7cc;
+  position: relative;
+  overflow: hidden;
+  animation: card-in 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+  margin-left: auto;
+  margin-right: auto;
+}
+.glass-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 12px;
+  background: linear-gradient(180deg, #00fff7 0%, #ff00e0 100%);
+  opacity: 0.18;
+  filter: blur(2px);
+  border-radius: 12px 0 0 12px;
+  z-index: 2;
+  pointer-events: none;
+}
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(40px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.launches-section {
+  width: 100%;
+  max-width: 440px;
+  padding: 1.2rem 1rem 1.5rem 1rem;
+  margin: 0 auto 1.5rem auto;
+}
+
+.launches-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.7rem;
+  justify-content: center;
+}
+
+.presized-launches {
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.7rem;
+}
+
+.launch-item {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, #eafff6 80%, #00fff7 100%);
+  border-radius: 14px;
+  min-height: 48px;
+  padding: 0.7rem 1rem 0.7rem 0.3rem;
+  box-shadow: 0 1px 8px #00fff733, 0 0.5px 2px #ff00e033;
+  gap: 1rem;
+  animation: fadein-up 0.7s;
+  position: relative;
+  transition: transform 0.18s, box-shadow 0.18s;
+  overflow: hidden;
+}
+.launch-item:hover {
+  transform: scale(1.025) translateX(4px);
+  box-shadow: 0 4px 24px #6f6fff66, 0 1.5px 8px #ff00e088;
+}
+.launch-item::before {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 80%;
+  background: linear-gradient(180deg, #00fff7 0%, #ff00e0 100%);
+  border-radius: 6px;
+  position: absolute;
+  left: 0.5px; top: 10%;
+  box-shadow: 0 0 8px #00fff7cc;
+}
+@keyframes fadein-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.launch-token-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  border: 2px solid #00fff7;
+  box-shadow: 0 0 8px #00fff7cc;
+}
+
+.launch-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  font-family: 'Rajdhani', 'Segoe UI', 'Arial', sans-serif;
+}
+
+.launch-name {
+  font-weight: 800;
+  color: #1a1a1a;
+  font-family: 'Orbitron', 'Rajdhani', sans-serif;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 2px #00fff7cc, 0 0 1px #fff;
+  font-size: 1.08em;
+  text-transform: uppercase;
+}
+
+.launch-time {
+  font-size: 0.95em;
+  color: #444;
+  letter-spacing: 0.03em;
+}
+
+.launch-link {
+  color: #00bfae;
+  text-decoration: underline;
+  font-size: 0.98em;
+  margin-top: 2px;
+  font-family: 'Orbitron', 'Rajdhani', sans-serif;
+  text-shadow: 0 0 2px #00fff7cc;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+
+.launch-placeholder {
+  color: #888;
+  background: linear-gradient(90deg, #eafff6 25%, #fff 50%, #eafff6 75%);
+  background-size: 200% 100%;
+  font-style: italic;
+  width: 100%;
+  text-align: center;
+  font-family: 'Rajdhani', 'Segoe UI', 'Arial', sans-serif;
+  animation: shimmer 2s infinite linear;
+  border-radius: 8px;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.fadein-up {
+  animation: fadein-up 0.7s;
+}
+
+.neon-glow {
+  filter: drop-shadow(0 0 18px #00fff7cc) drop-shadow(0 0 32px #00fff7cc);
+}
+
+.neon-fadein {
+  animation: fadein 1.2s;
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tikmint-badge {
+  margin-bottom: 1.2rem;
+  background: linear-gradient(90deg, #00fff7 0%, #6f6fff 100%);
+  color: #fff;
+  font-family: 'Orbitron', 'Rajdhani', sans-serif;
+  font-size: 1.18rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px #00fff7cc, 0 1.5px 8px #6f6fff88;
+  padding: 0.6em 1.6em;
+  text-transform: uppercase;
+  display: inline-block;
+  animation: badge-pop 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+}
+@keyframes badge-pop {
+  from { opacity: 0; transform: scale(0.8) translateY(-30px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.free-highlight {
+  color: #ff00e0;
+  text-shadow: 0 0 8px #ff00e0cc, 0 0 2px #fff;
+  font-size: 1.22em;
+  font-weight: 900;
+  margin-left: 0.3em;
+  letter-spacing: 0.12em;
+}
+
+.free-highlight-inline {
+  color: #ff00e0;
+  text-shadow: 0 0 8px #ff00e0cc, 0 0 2px #fff;
+  font-size: 1.1em;
+  font-weight: 900;
+  margin-left: 0.2em;
+  letter-spacing: 0.10em;
+  display: inline-block;
+  animation: badge-pop 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+@media (max-width: 600px) {
+  .tikmint-logo-centered {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.5rem;
+  }
+  .tikmint-logo-main {
+    width: 120px;
+  }
+  .presized-launches {
+    min-height: 350px;
+  }
+  .launch-item {
+    padding: 0.5rem 0.5rem 0.5rem 0.2rem;
+    gap: 0.5rem;
+  }
+  .launches-section {
+    padding: 0.7rem 0.3rem 1rem 0.3rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .tikmint-center-viewport {
+    align-items: center;
+    margin-left: 0;
+    max-width: 98vw;
+  }
+  .glass-card::before {
+    width: 6px;
+  }
+}
+
+.about-section {
+  margin-top: 2.5rem;
+  padding: 2.2rem 2rem 2.5rem 2rem;
+  background: rgba(255,255,255,0.92);
+  border-radius: 18px;
+  box-shadow: 0 2px 16px #00fff7cc, 0 1.5px 8px #6f6fff33;
+  max-width: 700px;
+  width: 100%;
+  color: #1a1a1a;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+.about-section h3 {
+  font-family: 'Orbitron', 'Rajdhani', sans-serif;
+  color: #00bfae;
+  text-shadow: 0 0 4px #00fff7cc;
+  font-size: 1.18rem;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.about-section p {
+  margin: 0 0 1.2em 0;
+}
+
+@media (max-width: 900px) {
+  .tikmint-center-viewport {
+    align-items: center;
+    margin-left: 0;
+    max-width: 98vw;
+  }
+  .glass-card {
+    max-width: 98vw;
+  }
+  .about-section {
+    padding: 1.2rem 0.7rem 1.5rem 0.7rem;
+    font-size: 0.98rem;
+    max-width: 98vw;
+  }
+  .tikmint-badge {
+    font-size: 1rem;
+    padding: 0.5em 1em;
+  }
+}
+
+@media (max-width: 600px) {
+  .about-section {
+    padding: 0.7rem 0.2rem 1rem 0.2rem;
+    font-size: 0.93rem;
+    border-radius: 12px;
+  }
+  .tikmint-logo-centered {
+    width: 38px;
+    height: 38px;
+  }
+  .tikmint-logo-main {
+    width: 90px;
+  }
+  .glass-card {
+    padding: 0.7rem 0.2rem 1rem 0.2rem;
+    border-radius: 12px;
+  }
+  .tikmint-badge {
+    font-size: 0.92rem;
+    padding: 0.4em 0.7em;
+    border-radius: 10px;
+  }
+}
