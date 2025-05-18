@@ -6,13 +6,17 @@ body, html {
   font-family: 'Rajdhani', 'Segoe UI', 'Arial', sans-serif;
   overflow-x: hidden;
   scroll-behavior: smooth;
+  width: 100%;
 }
 
 /* Animated gradient overlay */
 .tikmint-outer::before {
   content: '';
   position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   z-index: 0;
   pointer-events: none;
   background: linear-gradient(120deg, #00fff7 0%, #6f6fff 50%, #ff00e0 100%);
@@ -28,6 +32,9 @@ body, html {
   min-height: 100vh;
   width: 100%;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Navbar */
@@ -45,6 +52,7 @@ body, html {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   transition: background 0.3s ease;
+  box-sizing: border-box;
 }
 .tikmint-navbar:hover {
   background: rgba(0, 255, 247, 0.95);
@@ -53,6 +61,7 @@ body, html {
   display: flex;
   align-items: center;
   cursor: pointer;
+  margin-right: 1rem;
 }
 .nav-logo {
   width: 36px;
@@ -67,6 +76,12 @@ body, html {
   color: #111;
   letter-spacing: 1px;
 }
+.nav-links {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  text-align: center;
+}
 .nav-links a {
   margin: 0 1rem;
   font-size: 1.1rem;
@@ -77,12 +92,13 @@ body, html {
   cursor: pointer;
 }
 .nav-links a:hover {
-  color: #ff00e0;
-  text-shadow: 0 0 8px #ff00e088;
+  color: #FFFFFF !important;
+  text-shadow: 0 0 8px rgba(255,255,255,0.8) !important;
 }
 .nav-social-links {
   display: flex;
   gap: 0.8rem;
+  margin-left: 1rem;
 }
 .nav-social-links a {
   display: flex;
@@ -96,28 +112,31 @@ body, html {
   transition: background 0.2s, transform 0.2s;
 }
 .nav-social-links a:hover {
-  background: #ff00e0;
+  background: #ffffff;
   transform: scale(1.1);
 }
 .nav-social-links svg {
-  width: 18px; height: 18px;
+  width: 18px;
+  height: 18px;
 }
 
 /* Page Content Wrapper */
 .tikmint-page-content {
   padding-top: 80px; /* Height of navbar */
-  max-width: 1280px;
-  margin-left: 100px;
-  margin-right: auto;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto;
   box-sizing: border-box;
-  position: relative; /* Needed for transform to work as expected relative to its centered position */
-  transform: translateX(120px); /* Shift the centered block 120px to the right */
+  position: relative;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
 }
 
-/* Media query to revert to simple centering on smaller screens */
-@media (max-width: 1440px) { /* Increased breakpoint slightly to ensure transform is removed earlier */
+/* Media query for smaller screens */
+@media (max-width: 1440px) {
   .tikmint-page-content {
-    transform: translateX(0); /* Remove the shift */
     max-width: 95%;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -137,7 +156,12 @@ body, html {
 }
 .hero-section {
   /* Specific styles for hero if needed, e.g., different bg */
-  text-align: center; /* Ensure text within hero is centered by default */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 /* Hero content alignment */
@@ -148,15 +172,22 @@ body, html {
   margin-bottom: 0.7rem;
   margin-left: auto;
   margin-right: auto;
+  width: 100%; /* Ensure full width */
+  text-align: center; /* Center text content */
 }
 .tikmint-logo-centered {
   width: 64px;
   height: 64px;
   max-width: 20vw;
-  margin-bottom: 0.3rem;
+  margin: 0 auto 0.3rem auto; /* Center the logo */
   filter: drop-shadow(0 0 16px #00fff7cc) drop-shadow(0 0 32px #6f6fff88);
   animation: pulse-glow 2.5s infinite alternate, shine-logo 3.5s infinite linear;
   transition: transform 0.2s;
+  background: white;
+  border-radius: 50%;
+  padding: 6px;
+  box-sizing: border-box;
+  border: 3px solid #00fff7;
 }
 .tikmint-logo-centered:hover {
   transform: scale(1.08) rotate(-8deg);
@@ -174,12 +205,13 @@ body, html {
 .tikmint-logo-main {
   width: 180px;
   max-width: 60vw;
-  margin-bottom: 0.7rem;
+  margin: 0 auto 0.7rem auto;
   font-family: 'Orbitron', 'Rajdhani', sans-serif;
   filter: drop-shadow(0 0 8px #00fff7cc) drop-shadow(0 0 18px #ff00e088);
   animation: shine-title 4s infinite linear;
   text-transform: uppercase;
   letter-spacing: 0.12em;
+  text-align: center;
 }
 @keyframes shine-title {
   0% { filter: drop-shadow(0 0 8px #00fff7cc) drop-shadow(0 0 18px #ff00e088); }
@@ -195,6 +227,7 @@ body, html {
   font-family: 'Rajdhani', 'Segoe UI', 'Arial', sans-serif;
   letter-spacing: 0.04em;
   animation: fadein 1.2s;
+  text-align: center;
 }
 .neon-text {
   font-family: 'Orbitron', 'Rajdhani', sans-serif;
@@ -206,24 +239,26 @@ body, html {
   font-weight: 700;
 }
 .glass-card {
-  background: rgba(255,255,255,0.97);
+  background: rgba(255, 255, 255, 0.97);
   border-radius: 22px;
   box-shadow: 0 4px 32px 0 #00fff7cc, 0 1.5px 8px 0 #ff00e088;
   backdrop-filter: blur(12px) saturate(1.3);
   border: 2.5px solid #00fff7cc;
   position: relative;
   overflow: hidden;
-  animation: card-in 1.2s cubic-bezier(.68,-0.55,.27,1.55);
-  margin-left: auto;
-  margin-right: auto;
+  animation: card-in 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  margin: 0 auto;
   max-width: 700px;
   width: 100%;
   padding: 2rem 2.5rem 2.5rem 2.5rem;
+  text-align: center;
 }
 .glass-card::before {
   content: '';
   position: absolute;
-  left: 0; top: 0; bottom: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
   width: 12px;
   background: linear-gradient(180deg, #00fff7 0%, #ff00e0 100%);
   opacity: 0.18;
@@ -282,7 +317,8 @@ body, html {
   background: linear-gradient(180deg, #00fff7 0%, #ff00e0 100%);
   border-radius: 6px;
   position: absolute;
-  left: 0.5px; top: 10%;
+  left: 0.5px;
+  top: 10%;
   box-shadow: 0 0 8px #00fff7cc;
 }
 @keyframes fadein-up {
@@ -364,8 +400,8 @@ body, html {
 }
 .tikmint-badge {
   margin-bottom: 1.2rem;
-  background: linear-gradient(90deg, #00fff7 0%, #6f6fff 100%);
-  color: #fff;
+  background: white;
+  color: black;
   font-family: 'Orbitron', 'Rajdhani', sans-serif;
   font-size: 1.18rem;
   font-weight: 800;
@@ -374,36 +410,41 @@ body, html {
   box-shadow: 0 2px 16px #00fff7cc, 0 1.5px 8px #6f6fff88;
   padding: 0.6em 1.6em;
   text-transform: uppercase;
-  display: inline-block;
-  animation: badge-pop 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+  display: block;
+  animation: badge-pop 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  border: 2px solid #00fff7;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  margin: 0 auto;
 }
 @keyframes badge-pop {
   from { opacity: 0; transform: scale(0.8) translateY(-30px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
-.free-highlight {
-  color: #ff00e0;
-  text-shadow: 0 0 8px #ff00e0cc, 0 0 2px #fff;
-  font-size: 1.22em;
+.free-highlight,
+.free-highlight-inline {
+  color: black;
+  text-shadow: none;
   font-weight: 900;
-  margin-left: 0.3em;
   letter-spacing: 0.12em;
+  display: inline-block;
+}
+.free-highlight {
+  font-size: 1.22em;
+  margin-left: 0.3em;
 }
 .free-highlight-inline {
-  color: #ff00e0;
-  text-shadow: 0 0 8px #ff00e0cc, 0 0 2px #fff;
   font-size: 1.1em;
-  font-weight: 900;
   margin-left: 0.2em;
   letter-spacing: 0.10em;
-  display: inline-block;
-  animation: badge-pop 1.2s cubic-bezier(.68,-0.55,.27,1.55);
 }
 .social-links {
   display: flex;
   gap: 1.1rem;
   margin-top: 0.5rem;
   margin-bottom: 0.2rem;
+  justify-content: center;
 }
 .social-links a {
   display: flex;
@@ -415,6 +456,12 @@ body, html {
   width: 38px;
   height: 38px;
   transition: box-shadow 0.18s, transform 0.18s;
+}
+.social-links a.tiktok-button {
+  background: black;
+}
+.social-links a.tiktok-button svg {
+  fill: white;
 }
 .social-links a:hover {
   box-shadow: 0 4px 16px #ff00e0cc, 0 2px 8px #00fff7cc;
@@ -444,11 +491,20 @@ body, html {
     padding: 0.7rem 0.3rem 1rem 0.3rem;
   }
   .nav-logo {
-    width: 30px; height: 30px;
+    width: 30px;
+    height: 30px;
   }
-  .nav-title { display: none; }
-  .nav-social-links svg { width: 16px; height: 16px; }
-  .nav-social-links a { width: 28px; height: 28px; }
+  .nav-title {
+    display: none;
+  }
+  .nav-social-links svg {
+    width: 16px;
+    height: 16px;
+  }
+  .nav-social-links a {
+    width: 28px;
+    height: 28px;
+  }
 }
 @media (max-width: 900px) {
   .tikmint-navbar {
@@ -464,7 +520,8 @@ body, html {
     padding: 2rem 1rem;
     min-height: auto;
   }
-  .launches-section.glass-card, .about-section {
+  .launches-section.glass-card,
+  .about-section {
     width: 95%;
   }
   .glass-card {
@@ -487,7 +544,7 @@ body, html {
 .about-section {
   margin-top: 2.5rem;
   padding: 2.2rem 2rem 2.5rem 2rem;
-  background: rgba(255,255,255,0.92);
+  background: rgba(255, 255, 255, 0.92);
   border-radius: 18px;
   box-shadow: 0 2px 16px #00fff7cc, 0 1.5px 8px #6f6fff33;
   max-width: 800px;
@@ -496,10 +553,7 @@ body, html {
   color: #1a1a1a;
   font-size: 1.08rem;
   line-height: 1.7;
-  margin-bottom: 2.5rem;
-  text-align: center; /* Center the text within the about section block */
-  margin-left: auto;
-  margin-right: auto;
+  text-align: center;
 }
 .about-section h3 {
   font-family: 'Orbitron', 'Rajdhani', sans-serif;
@@ -544,6 +598,7 @@ body, html {
   display: flex; /* Added to help center their direct children if needed */
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 /* Ensure cards/content blocks within wrappers are centered */
@@ -559,6 +614,9 @@ body, html {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .launches-section.glass-card {
@@ -572,4 +630,28 @@ body, html {
   width: 100%; /* Take full width up to max-width */
   margin: 2rem auto; 
   text-align: center; 
+}
+
+/* CTA Button styles */
+.cta-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 14px 28px;
+  background: linear-gradient(45deg, #000000, #333333);
+  color: white;
+  border-radius: 30px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  text-decoration: none;
+  border: 2px solid #00fff7;
+  box-shadow: 0 4px 20px rgba(0, 255, 247, 0.6);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 25px rgba(0, 255, 247, 0.8);
+  background: linear-gradient(45deg, #333333, #000000);
 }
