@@ -1,7 +1,9 @@
 {
   "rewrites": [
     { "source": "/api/launches", "destination": "/api/launches.js" },
-    { "source": "/api/wallet/:address/launches", "destination": "/api/wallet/[address]/launches.js" }
+    { "source": "/api/wallet/:address/launches", "destination": "/api/wallet/[address]/launches.js" },
+    { "source": "/api/admin/addToken", "destination": "/api/admin/addToken.js" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {

@@ -722,3 +722,100 @@ body, html {
   text-shadow: none;
   letter-spacing: 0.05em;
 }
+
+/* Admin page styles */
+.admin-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  width: 100%;
+  min-height: calc(100vh - 80px);
+}
+
+.admin-card {
+  max-width: 500px;
+  width: 100%;
+  padding: 2.5rem;
+}
+
+.admin-instruction {
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  color: #00bfae;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+}
+
+.form-group input {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 2px solid rgba(0, 255, 247, 0.3);
+  background: rgba(255, 255, 255, 0.8);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+  border-color: #00fff7;
+  box-shadow: 0 0 8px rgba(0, 255, 247, 0.5);
+  outline: none;
+}
+
+.admin-submit-btn {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: linear-gradient(45deg, #000000, #222222);
+  color: white;
+  border: 2px solid #00fff7;
+  border-radius: 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+}
+
+.admin-submit-btn:hover:not(:disabled) {
+  background: linear-gradient(45deg, #222222, #000000);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 255, 247, 0.5);
+}
+
+.admin-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.success-message {
+  background-color: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 8px;
+  color: #2e7d32;
+  padding: 10px 15px;
+  margin: 10px 0;
+  font-family: 'Rajdhani', sans-serif;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}

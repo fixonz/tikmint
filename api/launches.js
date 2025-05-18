@@ -1,4 +1,10 @@
-// Sample data - static version of what was in the backend
+import { promises as fs } from 'fs';
+import path from 'path';
+
+// File path for storing tokens
+const DATA_FILE_PATH = path.join(process.cwd(), 'data', 'tokens.json');
+
+// Sample data as fallback
 const sampleLaunches = [
   { 
     name: 'Toast', 
@@ -10,8 +16,20 @@ const sampleLaunches = [
   }
 ];
 
+// Read tokens from file
+async function readTokens() {
+  try {
+    const data = await fs.readFile(DATA_FILE_PATH, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.log('Error reading tokens file, using sample data:', error.message);
+    // If file doesn't exist or is invalid, return the sample data
+    return sampleLaunches;
+  }
+}
+
 // This is a Vercel serverless function
-export default function handler(req, res) {
+export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -34,9 +52,9 @@ export default function handler(req, res) {
   }
 
   try {
-    // In a real implementation, you would fetch data from Solana here
-    // For now, we'll just return the sample data
-    res.status(200).json(sampleLaunches);
+    // Read launches from file
+    const launches = await readTokens();
+    res.status(200).json(launches);
   } catch (error) {
     console.error('Error in API:', error);
     res.status(500).json({ error: 'Failed to fetch launches' });
