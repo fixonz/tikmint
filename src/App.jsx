@@ -24,7 +24,7 @@ function App() {
     const fetchLaunches = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:3001/api/launches');
+        const response = await fetch('/api/launches');
         
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
